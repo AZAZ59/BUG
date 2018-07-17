@@ -16,8 +16,7 @@ if __name__ == '__main__':
     ##########################
     ###      TEST OUT      ###
     ##########################
-    x = y = 1
-    queue = [(x, y)]
+    queue = [(1, 1)]
     while len(queue) != 0:
         x, y = queue.pop()
         GameMap[y][x] = 0
@@ -34,24 +33,17 @@ if __name__ == '__main__':
         step += 1
         GameMap[y][x] += 1
 
-        dx, dy = dirs[curDir]
+        min_count = min([GameMap[y + dy][x + dx] for dx,dy in dirs])
 
-        min_count = GameMap[y + dy][x + dx]
-        for dx, dy in dirs:
-            if GameMap[y + dy][x + dx] < min_count:
-                min_count = GameMap[y + dy][x + dx]
-        ## minimum
         dx, dy = dirs[curDir]
         if GameMap[y + dy][x + dx] == min_count:
             x += dx
             y += dy
-            continue
-        ## eq direction
-
-        for dir_, (dx, dy) in enumerate(dirs):
-            if GameMap[y + dy][x + dx] == min_count:
-                curDir = dir_
-                x += dx
-                y += dy
-                break
+        else:
+            for dir_, (dx, dy) in enumerate(dirs):
+                if GameMap[y + dy][x + dx] == min_count:
+                    curDir = dir_
+                    x += dx
+                    y += dy
+                    break
     print(step)
