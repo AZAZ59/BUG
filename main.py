@@ -20,18 +20,38 @@ if __name__ == '__main__':
     queue = [(x, y)]
     while len(queue) != 0:
         x, y = queue.pop()
-        GameMap[x][y] = 0
+        GameMap[y][x] = 0
         for dx, dy in dirs:
-            if GameMap[x + dx][y + dy] == -1:
+            if GameMap[y + dy][x + dx] == -1:
                 queue.append((x + dx, y + dy))
     if GameMap[-2][-2] != 0:
         print('-1')
         exit(0)
     x = y = 1
-    curDir=0
-    while y!=rows-1 and x != cols-1:
-        pass
+    curDir = 0
+    step = 0
+    while y != rows - 2 or x != cols - 2:
+        step += 1
+        GameMap[y][x] += 1
 
-    for row in GameMap:
-        print(''.join(list(map(lambda x: '@' if x > 100 else '.' if x == 0 else '!', row))))
-        # print(rows, cols)
+        dx, dy = dirs[curDir]
+
+        min_count = GameMap[y + dy][x + dx]
+        for dx, dy in dirs:
+            if GameMap[y + dy][x + dx] < min_count:
+                min_count = GameMap[y + dy][x + dx]
+        ## minimum
+        dx, dy = dirs[curDir]
+        if GameMap[y + dy][x + dx] == min_count:
+            x += dx
+            y += dy
+            continue
+        ## eq direction
+
+        for dir_, (dx, dy) in enumerate(dirs):
+            if GameMap[y + dy][x + dx] == min_count:
+                curDir = dir_
+                x += dx
+                y += dy
+                break
+    print(step)
